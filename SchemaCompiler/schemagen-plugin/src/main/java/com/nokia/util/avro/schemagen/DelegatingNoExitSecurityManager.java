@@ -23,240 +23,242 @@ import java.security.Permission;
 /**
  * @author Ben Fagin (Nokia)
  * @version 02-03-2012
- *
- * Allows for the capture of calls to System.exit(0).
- * The call is 'converted' to a known Exception type which can be caught and dealt with.
- * We also explicitly allow replacing this security manager (presumably back with the
- * older one). All other methods are directly delegated to the delegate security manager
- * (again, presumably the older one).
- *
- * Usages of this class should be TEMPORARY and handled with GREAT CARE.
- * You have been warned!
+ *          <p>
+ *          Allows for the capture of calls to System.exit(0).
+ *          The call is 'converted' to a known Exception type which can be caught and dealt with.
+ *          We also explicitly allow replacing this security manager (presumably back with the
+ *          older one). All other methods are directly delegated to the delegate security manager
+ *          (again, presumably the older one).
+ *          <p>
+ *          Usages of this class should be TEMPORARY and handled with GREAT CARE.
+ *          You have been warned!
  */
 public class DelegatingNoExitSecurityManager extends SecurityManager {
-	private final SecurityManager delegate;
-	public static final class NormalExitException extends RuntimeException { }
+    private final SecurityManager delegate;
 
-	DelegatingNoExitSecurityManager(SecurityManager delegate) {
-		this.delegate = delegate;
-	}
+    public static final class NormalExitException extends RuntimeException {
+    }
 
-	/*
-		Prevent System.exit(0).
-	 */
-	@Override
-	public void checkExit(int status) {
-		if (status == 0) {
-			throw new NormalExitException();
-		}
-		
-		if (delegate != null) {
-			delegate.checkExit(status);
-		}
-	}
+    DelegatingNoExitSecurityManager(SecurityManager delegate) {
+        this.delegate = delegate;
+    }
 
-	/*
-		Allow replacement of this security manager.
-	 */
-	@Override
-	public void checkPermission(Permission perm) {
-		if ("setSecurityManager".equals(perm.getName())) {
-			return;
-		}
+    /*
+        Prevent System.exit(0).
+     */
+    @Override
+    public void checkExit(int status) {
+        if (status == 0) {
+            throw new NormalExitException();
+        }
 
-		if (delegate != null) {
-			delegate.checkPermission(perm);
-		}
-	}
+        if (delegate != null) {
+            delegate.checkExit(status);
+        }
+    }
 
-	@Override
-	public void checkCreateClassLoader() {
-		if (delegate != null) {
-			delegate.checkCreateClassLoader();
-		}
-	}
+    /*
+        Allow replacement of this security manager.
+     */
+    @Override
+    public void checkPermission(Permission perm) {
+        if ("setSecurityManager".equals(perm.getName())) {
+            return;
+        }
 
-	@Override
-	public void checkAccess(Thread t) {
-		if (delegate != null) {
-			delegate.checkAccess(t);
-		}		
-	}
+        if (delegate != null) {
+            delegate.checkPermission(perm);
+        }
+    }
 
-	@Override
-	public void checkAccess(ThreadGroup g) {
-		if (delegate != null) {
-			delegate.checkAccess(g);
-		}		
-	}
+    @Override
+    public void checkCreateClassLoader() {
+        if (delegate != null) {
+            delegate.checkCreateClassLoader();
+        }
+    }
 
-	@Override
-	public void checkExec(String cmd) {
-		if (delegate != null) {
-			delegate.checkExec(cmd);
-		}	
-	}
+    @Override
+    public void checkAccess(Thread t) {
+        if (delegate != null) {
+            delegate.checkAccess(t);
+        }
+    }
 
-	@Override
-	public void checkLink(String lib) {
-		if (delegate != null) {
-			delegate.checkLink(lib);
-		}		
-	}
+    @Override
+    public void checkAccess(ThreadGroup g) {
+        if (delegate != null) {
+            delegate.checkAccess(g);
+        }
+    }
 
-	@Override
-	public void checkRead(FileDescriptor fd) {
-		if (delegate != null) {
-			delegate.checkRead(fd);
-		}		
-	}
+    @Override
+    public void checkExec(String cmd) {
+        if (delegate != null) {
+            delegate.checkExec(cmd);
+        }
+    }
 
-	@Override
-	public void checkRead(String file) {
-		if (delegate != null) {
-			delegate.checkRead(file);
-		}
-	}
+    @Override
+    public void checkLink(String lib) {
+        if (delegate != null) {
+            delegate.checkLink(lib);
+        }
+    }
 
-	@Override
-	public void checkRead(String file, Object context) {
-		if (delegate != null) {
-			delegate.checkRead(file, context);
-		}		
-	}
+    @Override
+    public void checkRead(FileDescriptor fd) {
+        if (delegate != null) {
+            delegate.checkRead(fd);
+        }
+    }
 
-	@Override
-	public void checkWrite(FileDescriptor fd) {
-		if (delegate != null) {
-			delegate.checkWrite(fd);
-		}		
-	}
+    @Override
+    public void checkRead(String file) {
+        if (delegate != null) {
+            delegate.checkRead(file);
+        }
+    }
 
-	@Override
-	public void checkWrite(String file) {
-		if (delegate != null) {
-			delegate.checkWrite(file);
-		}	
-	}
+    @Override
+    public void checkRead(String file, Object context) {
+        if (delegate != null) {
+            delegate.checkRead(file, context);
+        }
+    }
 
-	@Override
-	public void checkDelete(String file) {
-		if (delegate != null) {
-			delegate.checkDelete(file);
-		}
-	}
+    @Override
+    public void checkWrite(FileDescriptor fd) {
+        if (delegate != null) {
+            delegate.checkWrite(fd);
+        }
+    }
 
-	@Override
-	public void checkConnect(String host, int port) {
-		if (delegate != null) {
-			delegate.checkConnect(host, port);
-		}
-	}
+    @Override
+    public void checkWrite(String file) {
+        if (delegate != null) {
+            delegate.checkWrite(file);
+        }
+    }
 
-	@Override
-	public void checkConnect(String host, int port, Object context) {
-		if (delegate != null) {
-			delegate.checkConnect(host, port, context);
-		}
-	}
+    @Override
+    public void checkDelete(String file) {
+        if (delegate != null) {
+            delegate.checkDelete(file);
+        }
+    }
 
-	@Override
-	public void checkListen(int port) {
-		if (delegate != null) {
-			delegate.checkListen(port);
-		}
-	}
+    @Override
+    public void checkConnect(String host, int port) {
+        if (delegate != null) {
+            delegate.checkConnect(host, port);
+        }
+    }
 
-	@Override
-	public void checkAccept(String host, int port) {
-		if (delegate != null) {
-			delegate.checkAccept(host, port);
-		}
-	}
+    @Override
+    public void checkConnect(String host, int port, Object context) {
+        if (delegate != null) {
+            delegate.checkConnect(host, port, context);
+        }
+    }
 
-	@Override
-	public void checkMulticast(InetAddress maddr) {
-		if (delegate != null) {
-			delegate.checkMulticast(maddr);
-		}
-	}
+    @Override
+    public void checkListen(int port) {
+        if (delegate != null) {
+            delegate.checkListen(port);
+        }
+    }
 
-	@Override
-	public void checkPropertiesAccess() {
-		if (delegate != null) {
-			delegate.checkPropertiesAccess();
-		}
-	}
+    @Override
+    public void checkAccept(String host, int port) {
+        if (delegate != null) {
+            delegate.checkAccept(host, port);
+        }
+    }
 
-	@Override
-	public void checkPropertyAccess(String key) {
-		if (delegate != null) {
-			delegate.checkPropertyAccess(key);
-		}
-	}
+    @Override
+    public void checkMulticast(InetAddress maddr) {
+        if (delegate != null) {
+            delegate.checkMulticast(maddr);
+        }
+    }
 
-	@Override
-	public boolean checkTopLevelWindow(Object window) {
-		if (delegate != null) {
-			return delegate.checkTopLevelWindow(window);
-		} else {
-			return super.checkTopLevelWindow(window);
-		}
-	}
+    @Override
+    public void checkPropertiesAccess() {
+        if (delegate != null) {
+            delegate.checkPropertiesAccess();
+        }
+    }
 
-	@Override
-	public void checkPrintJobAccess() {
-		if (delegate != null) {
-			delegate.checkPrintJobAccess();
-		}
-	}
+    @Override
+    public void checkPropertyAccess(String key) {
+        if (delegate != null) {
+            delegate.checkPropertyAccess(key);
+        }
+    }
 
-	@Override
-	public void checkSystemClipboardAccess() {
-		if (delegate != null) {
-			delegate.checkSystemClipboardAccess();
-		}
-	}
+    @Override
+    public boolean checkTopLevelWindow(Object window) {
+        if (delegate != null) {
+            return delegate.checkTopLevelWindow(window);
+        } else {
+            return super.checkTopLevelWindow(window);
+        }
+    }
 
-	@Override
-	public void checkAwtEventQueueAccess() {
-		if (delegate != null) {
-			delegate.checkAwtEventQueueAccess();
-		}
-	}
+    @Override
+    public void checkPrintJobAccess() {
+        if (delegate != null) {
+            delegate.checkPrintJobAccess();
+        }
+    }
 
-	@Override
-	public void checkPackageAccess(String pkg) {
-		if (delegate != null) {
-			delegate.checkPackageAccess(pkg);
-		}
-	}
+    @Override
+    public void checkSystemClipboardAccess() {
+        if (delegate != null) {
+            delegate.checkSystemClipboardAccess();
+        }
+    }
 
-	@Override
-	public void checkPackageDefinition(String pkg) {
-		if (delegate != null) {
-			delegate.checkPackageDefinition(pkg);
-		}
-	}
+    @Override
+    public void checkAwtEventQueueAccess() {
+        if (delegate != null) {
+            delegate.checkAwtEventQueueAccess();
+        }
+    }
 
-	@Override
-	public void checkSetFactory() {
-		if (delegate != null) {
-			delegate.checkSetFactory();
-		}
-	}
+    @Override
+    public void checkPackageAccess(String pkg) {
+        if (delegate != null) {
+            delegate.checkPackageAccess(pkg);
+        }
+    }
 
-	@Override
-	public void checkMemberAccess(Class<?> clazz, int which) {
-		if (delegate != null) {
-			delegate.checkMemberAccess(clazz, which);
-		}
-	}
+    @Override
+    public void checkPackageDefinition(String pkg) {
+        if (delegate != null) {
+            delegate.checkPackageDefinition(pkg);
+        }
+    }
 
-	@Override
-	public void checkSecurityAccess(String target) {
-		if (delegate != null) {
-			delegate.checkSecurityAccess(target);
-		}
-	}
+    @Override
+    public void checkSetFactory() {
+        if (delegate != null) {
+            delegate.checkSetFactory();
+        }
+    }
+
+    @Override
+    public void checkMemberAccess(Class<?> clazz, int which) {
+        if (delegate != null) {
+            delegate.checkMemberAccess(clazz, which);
+        }
+    }
+
+    @Override
+    public void checkSecurityAccess(String target) {
+        if (delegate != null) {
+            delegate.checkSecurityAccess(target);
+        }
+    }
 }

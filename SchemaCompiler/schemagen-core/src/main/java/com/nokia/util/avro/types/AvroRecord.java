@@ -55,7 +55,6 @@ public class AvroRecord extends NamedAvroType {
 		field.name = name;
 		field.type = type;
 		field.defaultValue = defaultValue;
-
 		fields.add(field);
 	}
 

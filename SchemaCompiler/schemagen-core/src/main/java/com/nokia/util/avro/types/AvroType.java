@@ -26,28 +26,34 @@ import java.util.Set;
  * @version 01-12-2012
  */
 public abstract class AvroType {
-	protected String defaultValue;
 
-	/**
-	 * Returns a set of fully qualified dependency names (ie namespace + '.' + name).
-	 * This is used when building the sorted set of schema types.
-	 *
-	 * @return a set of dependent type names
-	 */
-	public abstract Set<String> getDependencies();
+    protected String defaultValue;
+    protected String doc;
 
-	/**
-	 * The default value for this avro type. The string can be user-defined, or
-	 * use a fixed value specific to the type.
-	 *
-	 * @see <a href="http://avro.apache.org/docs/current/spec.html#schema_record">avro record docs</a>
-	 * @return the default value for the type
-	 */
-	public final String getDefaultValue() {
-		return defaultValue;
-	}
+    /**
+     * Returns a set of fully qualified dependency names (ie namespace + '.' + name).
+     * This is used when building the sorted set of schema types.
+     *
+     * @return a set of dependent type names
+     */
+    public abstract Set<String> getDependencies();
 
-	public final void setDefaultValue(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
+    /**
+     * The default value for this avro type. The string can be user-defined, or
+     * use a fixed value specific to the type.
+     *
+     * @return the default value for the type
+     * @see <a href="http://avro.apache.org/docs/current/spec.html#schema_record">avro record docs</a>
+     */
+    public final String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public final void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public final void setDoc(String doc) {
+        this.doc = doc;
+    }
 }

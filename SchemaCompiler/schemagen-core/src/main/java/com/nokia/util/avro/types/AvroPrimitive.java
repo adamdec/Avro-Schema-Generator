@@ -29,69 +29,68 @@ import java.util.Set;
  * @version 01-12-2012
  */
 public class AvroPrimitive extends AvroType {
-	public static final AvroPrimitive NULL_TYPE = PrimitiveType.NULL.newInstance();
+    public static final AvroPrimitive NULL_TYPE = PrimitiveType.NULL.newInstance();
 
-	public enum PrimitiveType {
-		NULL("null", "null"),
-		BOOLEAN("boolean", "true"),
-		INT("int", "0"),
-		LONG("long", "0"),
-		FLOAT("float", "0.0"),
-		DOUBLE("double", "0.0"),
-		STRING("string", ""),
-		BYTES("bytes", "\\\\u00FF"),   // this is a byte buffer
-		BYTE("int", "0"),              // avro has no concept of a single byte
+    public enum PrimitiveType {
+        NULL("null", "null"),
+        BOOLEAN("boolean", "true"),
+        INT("int", "0"),
+        INTEGER("integer", "0"),
+        LONG("long", "0"),
+        FLOAT("float", "0.0"),
+        DOUBLE("double", "0.0"),
+        STRING("string", ""),
+        BYTES("bytes", "\\\\u00FF"),   // this is a byte buffer
+        BYTE("int", "0");              // avro has no concept of a single byte
 
-		;
+        public final String name;
+        public final String defaultValue;
 
-		public final String name;
-		public final String defaultValue;
+        PrimitiveType(String name, String defaultValue) {
+            this.name = name;
+            this.defaultValue = defaultValue;
+        }
 
-		PrimitiveType(String name, String defaultValue) {
-			this.name = name;
-			this.defaultValue = defaultValue;
-		}
+        public AvroPrimitive newInstance() {
+            return new AvroPrimitive(this);
+        }
+    }
 
-		public AvroPrimitive newInstance() {
-			return new AvroPrimitive(this);
-		}
-	}
+    private String name;
 
-	private String name;
+    public AvroPrimitive(PrimitiveType type) {
+        this.name = type.name;
+        this.defaultValue = type.defaultValue;
+    }
 
-	public AvroPrimitive(PrimitiveType type) {
-		this.name = type.name;
-		this.defaultValue = type.defaultValue;
-	}
+    public static AvroPrimitive fromType(String type) {
+        PrimitiveType value = null;
 
-	public static AvroPrimitive fromType(String type) {
-		PrimitiveType value = null;
-		
-		for (PrimitiveType primitiveType : PrimitiveType.values()) {
-			if (primitiveType.name().equals(type.toUpperCase())) {
-				value = primitiveType;
-				break;
-			}
-		}
-		
-		if (value == null) {
-			throw new RuntimeException("unsupported primitive type: " + type);
-		}
-		
-		return new AvroPrimitive(value);
-	}	
-	
-	@JsonValue
-	public String getType() {
-		return name;
-	}
+        for (PrimitiveType primitiveType : PrimitiveType.values()) {
+            if (primitiveType.name().equals(type.toUpperCase())) {
+                value = primitiveType;
+                break;
+            }
+        }
 
-	@Override
-	public Set<String> getDependencies() {
-		return Collections.emptySet();
-	}
+        if (value == null) {
+            throw new RuntimeException("unsupported primitive type: " + type);
+        }
 
-	public boolean equalsType(AvroPrimitive other) {
-		return this.name.equals(other.name);
-	}
+        return new AvroPrimitive(value);
+    }
+
+    @JsonValue
+    public String getType() {
+        return name;
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+        return Collections.emptySet();
+    }
+
+    public boolean equalsType(AvroPrimitive other) {
+        return this.name.equals(other.name);
+    }
 }
