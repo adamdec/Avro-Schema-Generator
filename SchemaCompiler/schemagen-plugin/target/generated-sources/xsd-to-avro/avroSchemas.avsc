@@ -1,0 +1,99 @@
+{
+  "doc" : "A date stored as a timestamp, in [ms] UTC.",
+  "name" : "_Date",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "timestamp",
+    "type" : "long",
+    "default" : "0"
+  } ]
+}{
+  "doc" : "XSD Type:{urn:nonstandard:XSD_Schema}User",
+  "name" : "User",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "fullName",
+    "type" : [ "null", "string" ],
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}string",
+    "default" : "null"
+  }, {
+    "name" : "age",
+    "type" : "int",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}int",
+    "default" : "0"
+  }, {
+    "name" : "born",
+    "type" : "com.nordea.avro._Date",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}dateTime"
+  }, {
+    "name" : "died",
+    "type" : "com.nordea.avro._Date",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}date, Date format 'yyyy-MM-dd'"
+  }, {
+    "name" : "tweets",
+    "type" : "long",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}long",
+    "default" : "0"
+  }, {
+    "name" : "married",
+    "type" : "boolean",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}boolean",
+    "default" : "true"
+  }, {
+    "name" : "height",
+    "type" : "double",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}decimal",
+    "default" : "0.0"
+  }, {
+    "name" : "width",
+    "type" : "double",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}double",
+    "default" : "0.0"
+  } ]
+}{
+  "doc" : "XSD Type:{urn:nonstandard:XSD_Schema}Product",
+  "name" : "Product",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "id",
+    "type" : "long",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}long",
+    "default" : "0"
+  }, {
+    "name" : "quantity",
+    "type" : [ "null", "string" ],
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}integer",
+    "default" : "null"
+  } ]
+}{
+  "doc" : "XSD Type:{urn:nonstandard:XSD_Schema}Products",
+  "name" : "Products",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "product",
+    "type" : {
+      "type" : "array",
+      "items" : "com.nordea.avro.Product"
+    },
+    "default" : "[]"
+  } ]
+}{
+  "doc" : "XSD Type:{urn:nonstandard:XSD_Schema}Order",
+  "name" : "Order",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "user",
+    "type" : [ "null", "com.nordea.avro.User" ],
+    "doc" : "XSD Type:{urn:nonstandard:XSD_Schema}user",
+    "default" : "null"
+  }, {
+    "name" : "products",
+    "type" : "com.nordea.avro.Products",
+    "doc" : "XSD Type:{urn:nonstandard:XSD_Schema}products"
+  } ]
+}

@@ -2,47 +2,62 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>schemagen-plugin</artifactId>
-	<name>Schemagen Maven Plugin</name>
-	<packaging>maven-plugin</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>schemagen-plugin</artifactId>
+    <name>Schemagen Maven Plugin</name>
+    <packaging>maven-plugin</packaging>
 
-	<parent>
-		<groupId>com.nokia.util.avro</groupId>
-		<artifactId>schemagen</artifactId>
-		<version>0.4-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>com.nokia.util.avro</groupId>
+        <artifactId>schemagen</artifactId>
+        <version>0.4-SNAPSHOT</version>
+    </parent>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-plugin-plugin</artifactId>
-				<version>3.5</version>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.5</version>
+            </plugin>
 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-plugin-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</reporting>
+            <plugin>
+                <groupId>com.nokia.util.avro</groupId>
+                <artifactId>schemagen-plugin</artifactId>
+                <version>0.4-SNAPSHOT</version>
+                <configuration>
+                    <!--<outputDirectory>target/generated-sources</outputDirectory>-->
+                    <packageName>com.nordea</packageName>
+                    <bindingFiles>
+                        <file>src/test/resources/binding.xjb</file>
+                    </bindingFiles>
+                    <schemaFiles>
+                        <schema>src/test/resources/advanced.xsd</schema>
+                    </schemaFiles>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-plugin-api</artifactId>
-			<version>3.3.9</version>
-		</dependency>
-		<dependency>
-			<groupId>com.nokia.util.avro</groupId>
-			<artifactId>schemagen-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nokia.util.avro</groupId>
+            <artifactId>schemagen-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

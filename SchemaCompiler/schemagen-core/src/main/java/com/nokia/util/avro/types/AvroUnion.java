@@ -30,69 +30,69 @@ import java.util.Set;
  * @version 01-12-2012
  */
 public class AvroUnion extends AvroType {
-	public final AvroType[] types;
+    public final AvroType[] types;
 
-	public AvroUnion(AvroType...types) {
-		if (types != null) {
+    public AvroUnion(AvroType... types) {
+        if (types != null) {
 //			Set<AvroType> typeSet = mergeUnions(types);
 //			this.types = typeSet.toArray(new AvroType[typeSet.size()]);
-			this.types = types;
-		} else {
-			this.types = new AvroType[]{};
-		}
+            this.types = types;
+        } else {
+            this.types = new AvroType[]{};
+        }
 
-		defaultValue = _getDefaultValue();
-	}
+        defaultValue = _getDefaultValue();
+    }
 
-	public AvroUnion(List<AvroType> types) {
-		this(types.toArray(new AvroType[types.size()]));
-	}
+    public AvroUnion(List<AvroType> types) {
+        this(types.toArray(new AvroType[types.size()]));
+    }
 
-	@JsonValue
-	private AvroType[] jsonValue() {
-		return types;
-	}
+    @JsonValue
+    private AvroType[] jsonValue() {
+        return types;
+    }
 
-	@Override
-	public Set<String> getDependencies() {
-		Set<String> dependencies = new HashSet<String>();
+    @Override
+    public Set<String> getDependencies() {
+        Set<String> dependencies = new HashSet<>();
 
-		for (AvroType type : types) {
-			dependencies.addAll(type.getDependencies());
-		}
+        for (AvroType type : types) {
+            dependencies.addAll(type.getDependencies());
+        }
 
-		return dependencies;
-	}
+        return dependencies;
+    }
 
-	/**
-	 * From the avro spec:
-	 * <pre>
-	 *     Default values for union fields correspond to the first schema in the union.
-	 * </pre>
-	 */
-	private String _getDefaultValue() {
-		if (types.length == 0) {
-			return null;
-		} else {
-			return types[0].getDefaultValue();
-		}
-	}
+    /**
+     * From the avro spec:
+     * <pre>
+     *     Default values for union fields correspond to the first schema in the union.
+     * </pre>
+     */
+    private String _getDefaultValue() {
+        if (types.length == 0) {
+            return null;
+        } else {
+            return types[0].getDefaultValue();
+        }
+    }
 
-	// this is a bit hackish, but nested unions are not allowed
-	// better would be to prevent them from being created in the first place
-	private Set<AvroType> mergeUnions(AvroType...types) {
-		Set<AvroType> retval = new HashSet<AvroType>();
-		Set<String> seen = new HashSet<String>();
+    // this is a bit hackish, but nested unions are not allowed
+    // better would be to prevent them from being created in the first place
+    private Set<AvroType> mergeUnions(AvroType... types) {
+        Set<AvroType> retval = new HashSet<>();
+        Set<String> seen = new HashSet<>();
 
-		for (AvroType type : types) {
-			if (type instanceof AvroUnion) {
-				retval.addAll(mergeUnions(((AvroUnion) type).types));
-			} else {
-				if (type instanceof AvroType)
-				retval.add(type);
-			}
-		}
+        for (AvroType type : types) {
+            if (type instanceof AvroUnion) {
+                retval.addAll(mergeUnions(((AvroUnion) type).types));
+            } else {
+                if (type instanceof AvroType)
+                    retval.add(type);
+            }
+        }
 
-		return retval;
-	}
+        return retval;
+    }
 }

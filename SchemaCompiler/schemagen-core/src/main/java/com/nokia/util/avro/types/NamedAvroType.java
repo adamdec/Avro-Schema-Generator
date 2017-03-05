@@ -29,11 +29,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * @see AvroEnum
  */
 public abstract class NamedAvroType extends AvroType {
-	@JsonProperty
-	public String name;
 
-	@JsonProperty
-	@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-	public String namespace;
+    @JsonProperty
+    public String name;
 
+    @JsonProperty
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    public String namespace;
 }

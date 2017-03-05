@@ -1,0 +1,13 @@
+{
+  "name" : "Order",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "user",
+    "type" : [ "null", "com.nordea.avro.User" ],
+    "default" : "null"
+  }, {
+    "name" : "products",
+    "type" : "com.nordea.avro.Products"
+  } ]
+}

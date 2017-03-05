@@ -1,9 +1,5 @@
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
-import com.nokia.util.avro.schemagen.AvroCompiler;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;

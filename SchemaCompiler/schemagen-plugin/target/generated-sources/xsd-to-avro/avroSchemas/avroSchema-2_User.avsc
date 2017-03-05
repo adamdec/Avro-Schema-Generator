@@ -1,0 +1,45 @@
+{
+  "doc" : "XSD Type:{urn:nonstandard:XSD_Schema}User",
+  "name" : "User",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "fullName",
+    "type" : [ "null", "string" ],
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}string",
+    "default" : "null"
+  }, {
+    "name" : "age",
+    "type" : "int",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}int",
+    "default" : "0"
+  }, {
+    "name" : "born",
+    "type" : "com.nordea.avro._Date",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}dateTime"
+  }, {
+    "name" : "died",
+    "type" : "com.nordea.avro._Date",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}date, Date format 'yyyy-MM-dd'"
+  }, {
+    "name" : "tweets",
+    "type" : "long",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}long",
+    "default" : "0"
+  }, {
+    "name" : "married",
+    "type" : "boolean",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}boolean",
+    "default" : "true"
+  }, {
+    "name" : "height",
+    "type" : "double",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}decimal",
+    "default" : "0.0"
+  }, {
+    "name" : "width",
+    "type" : "double",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}double",
+    "default" : "0.0"
+  } ]
+}

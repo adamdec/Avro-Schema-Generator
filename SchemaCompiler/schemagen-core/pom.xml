@@ -3,16 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <artifactId>schemagen-core</artifactId>
+    <name>Schemagen Core</name>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>com.nokia.util.avro</groupId>
         <artifactId>schemagen</artifactId>
         <version>0.4-SNAPSHOT</version>
     </parent>
-
-    <artifactId>schemagen-core</artifactId>
-    <name>Schemagen Core</name>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -62,25 +61,4 @@
             <version>21.0</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.nokia.util.avro</groupId>
-                <artifactId>schemagen-plugin</artifactId>
-                <version>0.4-SNAPSHOT</version>
-                <configuration>
-                    <outputDirectory>nokia</outputDirectory>
-                    <packageName>generated</packageName>
-                    <bindingFiles>
-                        <file>binding.xjb</file>
-                    </bindingFiles>
-                    <schemaFiles>
-                        <schema>advanced1.xsd</schema>
-                    </schemaFiles>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

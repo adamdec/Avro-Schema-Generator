@@ -1,7 +1,6 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             elementFormDefault="qualified"
             xmlns="urn:nonstandard:XSD_Schema"
-            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
             targetNamespace="urn:nonstandard:XSD_Schema">
 
     <xsd:element name="order" type="Order"/>

@@ -31,25 +31,26 @@ import java.util.Set;
  * @version 01-26-2012
  */
 public class DummyAvroType extends AvroType {
-	public final String type;
 
-	public DummyAvroType(String type) {
-		this.type = type;
-	}
-	
-	@JsonValue
-	private String jsonValue() {
-		return type;
-	}
+    public final String type;
 
-	@Override
-	public Set<String> getDependencies() {
-		if (type != null) {
-			Set<String> dependencies = new HashSet<String>();
-			dependencies.add(type);
-			return dependencies;
-		} else {
-			return Collections.emptySet();
-		}
-	}
+    public DummyAvroType(String type) {
+        this.type = type;
+    }
+
+    @JsonValue
+    private String jsonValue() {
+        return type;
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+        if (type != null) {
+            Set<String> dependencies = new HashSet<>();
+            dependencies.add(type);
+            return dependencies;
+        } else {
+            return Collections.emptySet();
+        }
+    }
 }

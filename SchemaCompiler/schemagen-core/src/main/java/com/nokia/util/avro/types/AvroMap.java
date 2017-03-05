@@ -29,23 +29,24 @@ import java.util.Set;
  * @version 01-12-2012
  */
 public class AvroMap extends AvroType {
-	@JsonProperty
-	public final String type = "map";
 
-	@JsonProperty
-	private final AvroType values;
+    @JsonProperty
+    public final String type = "map";
 
-	public AvroMap(AvroType valuesType) {
-		this.values = valuesType;
-		defaultValue = "{}";
-	}
+    @JsonProperty
+    private final AvroType values;
 
-	@Override
-	public Set<String> getDependencies() {
-		if (values != null) {
-			return values.getDependencies();
-		} else {
-			return Collections.emptySet();
-		}
-	}
+    public AvroMap(AvroType valuesType) {
+        this.values = valuesType;
+        defaultValue = "{}";
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+        if (values != null) {
+            return values.getDependencies();
+        } else {
+            return Collections.emptySet();
+        }
+    }
 }

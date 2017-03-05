@@ -18,15 +18,15 @@ package com.nokia.util.avro.schemagen;
 
 public class SchemagenException extends RuntimeException {
 
-	public SchemagenException(String message) {
-		super(message);
-	}
+    public SchemagenException(String message) {
+        super(message);
+    }
 
-	public SchemagenException(Throwable cause) {
-		super(cause);
-	}
+    public SchemagenException(Throwable cause) {
+        super(cause);
+    }
 
-	public SchemagenException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public SchemagenException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

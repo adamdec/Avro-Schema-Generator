@@ -24,8 +24,11 @@ import org.apache.maven.plugin.MojoFailureException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
+
+import static com.nokia.util.avro.schemagen.FileUtils.deleteFile;
+import static com.nokia.util.avro.schemagen.FileUtils.makeRelativePath;
+import static java.util.Comparator.comparing;
 
 /**
  * Maven Mojo, for execution from within Maven.
@@ -54,8 +57,7 @@ public class MavenSchemagenMojo extends AbstractMojo {
     /**
      * The root directory to output generated files.
      *
-     * @parameter
-     * @required
+     * @parameter default-value="target/generated-sources/xsd-to-avro"
      * @since 0.1
      */
     private File outputDirectory;
@@ -109,7 +111,6 @@ public class MavenSchemagenMojo extends AbstractMojo {
             }
 
             getLog().debug("restored previous security manager");
-
         } catch (Exception ex) {
             getLog().info("( Make sure your binding files specify the schema location relatively! )");
             throw new MojoFailureException(ex, "An error occurred during execution.", ex.getMessage());
@@ -124,13 +125,11 @@ public class MavenSchemagenMojo extends AbstractMojo {
 
         // get schema files, but resort by name
         File[] avroSchemas = avroSchemaOutput.listFiles();
-        Arrays.sort(avroSchemas, new Comparator<File>() {
-            public
-            @Override
-            int compare(File o1, File o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        if (avroSchemas == null) {
+            throw new MojoExecutionException("Could not locate schema output files.");
+        }
+
+        Arrays.sort(avroSchemas, comparing(File::getName));
 
         // compile (will place them in the same package as their namespaces define)
         getLog().info("Compiling avro classes from " + avroSchemas.length + " schema files.");
@@ -160,21 +159,8 @@ public class MavenSchemagenMojo extends AbstractMojo {
         }
     }
 
-    private void deleteFile(File f) throws MojoFailureException {
-        if (f.isDirectory()) {
-            for (File file : f.listFiles()) {
-                deleteFile(file);
-            }
-        }
-
-        boolean result = f.delete();
-        if (!result) {
-            throw new MojoFailureException("Could not remove file '" + f.getAbsolutePath() + "'.");
-        }
-    }
-
     private String[] buildArguments() {
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
 
         // package name
         if (packageName != null && !packageName.trim().isEmpty()) {
@@ -208,17 +194,5 @@ public class MavenSchemagenMojo extends AbstractMojo {
         getLog().info("command string:\n\t" + command);
 
         return args.toArray(new String[args.size()]);
-    }
-
-    private String makeRelativePath(File file) {
-        File cur = new File("");
-        String curPath = cur.getAbsolutePath();
-        String filePath = file.getAbsolutePath();
-
-        if (filePath.startsWith(curPath)) {
-            return filePath.substring(curPath.length() + 1);
-        } else {
-            return filePath;
-        }
     }
 }

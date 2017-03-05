@@ -27,65 +27,59 @@ import java.util.Set;
 /**
  * Class which represents an avro record type.
  * http://avro.apache.org/docs/current/spec.html#schema_record
- *
- * To add individual fields, use the {@link #addField(String, AvroType, String)} method.
+ * <p>
+ * To add individual fields, use the {@link #addField(String, AvroType, String, String)} method.
  *
  * @author Ben Fagin (Nokia)
  * @version 01-12-2012
  */
 @SuppressWarnings("unchecked")
 public class AvroRecord extends NamedAvroType {
-	@JsonProperty
-	public final String type = "record";
 
-	@JsonProperty
-	@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-	private String doc;
+    @JsonProperty
+    public final String type = "record";
 
-	@JsonProperty
-	private final List<AvroRecordField> fields = new ArrayList<AvroRecordField>();
+    @JsonProperty
+    private final List<AvroRecordField> fields = new ArrayList<>();
 
+    public AvroRecord() {
+        defaultValue = "{}";
+    }
 
-	public AvroRecord() {
-		defaultValue = "{}";
-	}
+    public void addField(String name, AvroType type, String defaultValue, String doc) {
+        AvroRecordField field = new AvroRecordField();
+        field.name = name;
+        field.type = type;
+        field.defaultValue = defaultValue;
+        field.doc = doc;
+        fields.add(field);
+    }
 
-	public void addField(String name, AvroType type, String defaultValue) {
-		AvroRecordField field = new AvroRecordField();
-		field.name = name;
-		field.type = type;
-		field.defaultValue = defaultValue;
-		fields.add(field);
-	}
+    public static class AvroRecordField {
 
-	public static class AvroRecordField {
-		@JsonProperty
-		public String name;
+        @JsonProperty
+        public String name;
 
-		@JsonProperty
-		public AvroType type;
+        @JsonProperty
+        public AvroType type;
 
-		@JsonProperty
-		@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-		public String doc;
-		
-		@JsonProperty("default")
-		@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-		public String defaultValue;
-	}
+        @JsonProperty
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        public String doc;
 
-	public void setDocs(String doc) {
-		this.doc = doc;
-	}
+        @JsonProperty("default")
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        public String defaultValue;
+    }
 
-	@Override
-	public Set<String> getDependencies() {
-		Set<String> dependencies = new HashSet<String>();	
-	
-		for (AvroRecordField field : fields) {
-			dependencies.addAll(field.type.getDependencies());
-		}
-		
-		return dependencies;
-	}
+    @Override
+    public Set<String> getDependencies() {
+        Set<String> dependencies = new HashSet<>();
+
+        for (AvroRecordField field : fields) {
+            dependencies.addAll(field.type.getDependencies());
+        }
+
+        return dependencies;
+    }
 }

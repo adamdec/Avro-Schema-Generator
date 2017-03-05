@@ -17,6 +17,7 @@
 package com.nokia.util.avro.schemagen;
 
 import com.nokia.util.avro.types.*;
+import com.nokia.util.avro.types.AvroPrimitive.PrimitiveType;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JPackage;
 import com.sun.codemodel.JType;
@@ -30,12 +31,18 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.nokia.util.avro.types.AvroPrimitive.PrimitiveType.NULL;
+import static com.nokia.util.avro.types.AvroPrimitive.fromType;
+import static com.nokia.util.avro.types.XSDTypeIntrospector.getXSDType;
 
 /**
  * @author Ben Fagin (Nokia)
  * @version 10-31-2012
  */
 public class SchemagenHelper {
+
     private static final String PARENT_FIELD = "_parent";    // name of parent field for type hierarchies
     private final Outline theOutline;
     private final Map<Class, Set<String>> specialSchemas = new HashMap<>(); // a list of special schemas to consider
@@ -55,16 +62,11 @@ public class SchemagenHelper {
         taken directly from the names of the constants.
      */
     public NamedAvroType avroFromEnum(CEnumLeafInfo info) {
-        List<String> constants = new ArrayList<String>();
-
-        for (CEnumConstant constant : info.getConstants()) {
-            constants.add(constant.getName());
-        }
-
-        AvroEnum enumType = new AvroEnum(constants);
+        AvroEnum enumType = new AvroEnum(info.getConstants()
+                .stream().map(c -> c.getName()).collect(Collectors.toList()));
         enumType.name = info.shortName;
         enumType.namespace = makePackageName(info.parent.getOwnerPackage());
-
+        enumType.setDoc(getXSDType(info));
         return enumType;
     }
 
@@ -78,18 +80,21 @@ public class SchemagenHelper {
         // class properties (as fields)
         for (CPropertyInfo property : info.getProperties()) {
             AvroType field = avroFromProperty(property, info.getOwnerPackage());
-            record.addField(property.getName(false), field, field.getDefaultValue());
+            record.addField(property.getName(false), field,
+                    field.getDefaultValue(), field.getDoc());
         }
 
         // super class reference (also as a field)
         CClassInfo parent = info.getBaseClass();
         if (parent != null) {
             String name = makePackageName(parent.getOwnerPackage()) + "." + parent.getSqueezedName();
-            record.addField(PARENT_FIELD, new DummyAvroType(name), null);
+            record.addField(PARENT_FIELD, new DummyAvroType(name),
+                    null, "Parent");
         }
 
         record.name = info.getSqueezedName();
         record.namespace = makePackageName(info.getOwnerPackage());
+        record.setDoc(getXSDType(info));
         return record;
     }
 
@@ -107,7 +112,6 @@ public class SchemagenHelper {
             }
 
             AvroType type;
-
             if (elements.size() == 1) {
                 type = new AvroArray(elements.get(0));
             } else {
@@ -117,9 +121,7 @@ public class SchemagenHelper {
             if (!isPropertyRequired(info)) {
                 type = new AvroUnion(AvroPrimitive.NULL_TYPE, type);
             }
-
             return type;
-
             // single elements
         } else {
             assertThat(info.ref().size() == 1, "can't handle multiple refs here");
@@ -137,18 +139,16 @@ public class SchemagenHelper {
                 throw new SchemagenException("nested unions are not allowed");
             }
 
-            returnType = new AvroUnion(AvroPrimitive.PrimitiveType.NULL.newInstance(), returnType);
+            returnType = new AvroUnion(NULL.newInstance(), returnType);
             if (defaultValue == null) {
-                defaultValue = AvroPrimitive.PrimitiveType.NULL.defaultValue;
+                defaultValue = NULL.defaultValue;
             }
         }
 
         if (defaultValue != null) {
             returnType.setDefaultValue(defaultValue);
         }
-
-        returnType.setDoc(info.javadoc);
-
+        returnType.setDoc(getXSDType(info));
         return returnType;
     }
 
@@ -196,20 +196,20 @@ public class SchemagenHelper {
 
         // arrays
         if (implType.isArray()) {
-            JType elementType = implType.elementType();
+            implType.elementType();
             throw new SchemagenException("arrays are not yet supported");
 
             // primitives
         } else if (implType.isPrimitive()) {
-            returnType = AvroPrimitive.fromType(implType.name());
+            returnType = fromType(implType.name());
 
             // might be a boxed primitive
         } else if (type.isBoxedType()) {
-            returnType = AvroPrimitive.fromType(implType.unboxify().name());
+            returnType = fromType(implType.unboxify().name());
 
             // might be a String, which is special
         } else if ("java.lang.String".equals(type.fullName())) {
-            returnType = AvroPrimitive.fromType("string");
+            returnType = fromType("string");
 
             // might be an Object, in which case it's assumed to be a reference
         } else if ("java.lang.Object".equals(type.fullName())) {
@@ -244,17 +244,14 @@ public class SchemagenHelper {
                 // some other defined class, but not generated
             } else if (implType instanceof JClass) {
                 returnType = avroFromSpecialTypes((JClass) implType, _package);
-
                 if (returnType == null) {
                     throw new SchemagenException("Unable to handle defined type '" + type.fullName() + "'.");
                 }
-
                 // give up  :(
             } else {
                 throw new SchemagenException("can't handle this type! " + type.fullName());
             }
         }
-
         return returnType;
     }
 
@@ -265,20 +262,18 @@ public class SchemagenHelper {
      */
     private AvroType avroFromSpecialTypes(JClass clazz, JPackage _package) {
         String pName = makePackageName(_package);
-
         if (clazz.isAssignableFrom(clazz.owner().ref(XMLGregorianCalendar.class))) {
             specialSchemas.get(DateAvroType.class).add(pName);
             return new DateAvroType(pName);
         }
 
         if (clazz.isAssignableFrom(clazz.owner().ref(BigInteger.class))) {
-            return AvroPrimitive.PrimitiveType.STRING.newInstance();
+            return PrimitiveType.STRING.newInstance();
         }
 
         if (clazz.isAssignableFrom(clazz.owner().ref(BigDecimal.class))) {
-            return AvroPrimitive.PrimitiveType.DOUBLE.newInstance();
+            return PrimitiveType.DOUBLE.newInstance();
         }
-
         return null;
     }
 
@@ -341,9 +336,5 @@ public class SchemagenHelper {
         if (!condition) {
             throw new SchemagenException(message);
         }
-    }
-
-    private static void assertThat(boolean condition) {
-        assertThat(condition, "assertion failure");
     }
 }

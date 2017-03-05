@@ -24,41 +24,40 @@ import java.io.File;
 /**
  * @author Ben Fagin (Nokia)
  * @version 02-03-2012
- *
  */
 public class AvroCompiler {
 
-	/**
-	 * Calls the avro compiler to compile Java bindings from avro schema files.
-	 * The files MUST be in a sorted order which accounts for their dependencies!
-	 *
-	 * @param sources JSON schema files to compile
-	 * @param outputDirectory directory to write packages and files
-	 */
-	public static void compileSchemas(File[] sources, File outputDirectory) {
-		try {
-			SpecificCompiler.compileSchema(sources, outputDirectory);
-		} catch (Exception ex) {
-			throw new SchemagenException("An error occurred while compiling.", ex);
-		}
-	}
+    /**
+     * Calls the avro compiler to compile Java bindings from avro schema files.
+     * The files MUST be in a sorted order which accounts for their dependencies!
+     *
+     * @param sources         JSON schema files to compile
+     * @param outputDirectory directory to write packages and files
+     */
+    public static void compileSchemas(File[] sources, File outputDirectory) {
+        try {
+            SpecificCompiler.compileSchema(sources, outputDirectory);
+        } catch (Exception ex) {
+            throw new SchemagenException("An error occurred while compiling.", ex);
+        }
+    }
 
-	public static String combineSchemas(File[] sources, String topLevelType) {
-		try {
-			Schema.Parser parser = new Schema.Parser();
+    public static String combineSchemas(File[] sources, String topLevelType) {
+        try {
+            Schema.Parser parser = new Schema.Parser();
 
-			for (File source : sources) {
-				parser.parse(source);
-			}
+            for (File source : sources) {
+                parser.parse(source);
+            }
 
-			Schema top = parser.getTypes().get(topLevelType);
-			if (top == null) {
-				throw new SchemagenException("Could not find top level type '"+topLevelType+"'.");
-			}
+            Schema top = parser.getTypes().get(topLevelType);
+            if (top == null) {
+                throw new SchemagenException("Could not find top level type '" + topLevelType + "'.");
+            }
 
-			return top.toString(true);
-		} catch (Exception ex) {
-			throw new SchemagenException("An error occurred while compiling.", ex);
-		}
-	}
+            return top.toString(true);
+        } catch (Exception ex) {
+            throw new SchemagenException("An error occurred while compiling.", ex);
+        }
+    }
 }

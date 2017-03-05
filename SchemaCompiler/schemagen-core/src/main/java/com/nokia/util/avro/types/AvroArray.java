@@ -18,8 +18,9 @@ package com.nokia.util.avro.types;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import java.util.Collections;
 import java.util.Set;
+
+import static java.util.Collections.emptySet;
 
 /**
  * Class which represents an Avro array type.
@@ -29,23 +30,24 @@ import java.util.Set;
  * @version 01-12-2012
  */
 public class AvroArray extends AvroType {
-	@JsonProperty
-	public final String type = "array";
-	
-	@JsonProperty
-	private final AvroType items;
 
-	public AvroArray(AvroType itemType) {
-		this.items = itemType;
-		defaultValue = "[]";
-	}
+    @JsonProperty
+    public final String type = "array";
 
-	@Override
-	public Set<String> getDependencies() {
-		if (items != null) {
-			return items.getDependencies();
-		} else {
-			return Collections.emptySet();
-		}
-	}
+    @JsonProperty
+    private final AvroType items;
+
+    public AvroArray(AvroType itemType) {
+        this.items = itemType;
+        defaultValue = "[]";
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+        if (items != null) {
+            return items.getDependencies();
+        } else {
+            return emptySet();
+        }
+    }
 }

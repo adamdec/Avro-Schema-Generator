@@ -18,8 +18,10 @@ package com.nokia.util.avro.types;
 
 import org.codehaus.jackson.annotate.JsonValue;
 
-import java.util.Collections;
 import java.util.Set;
+
+import static com.nokia.util.avro.types.AvroPrimitive.PrimitiveType.NULL;
+import static java.util.Collections.emptySet;
 
 /**
  * Class which represents an Avro primitive type.
@@ -29,7 +31,8 @@ import java.util.Set;
  * @version 01-12-2012
  */
 public class AvroPrimitive extends AvroType {
-    public static final AvroPrimitive NULL_TYPE = PrimitiveType.NULL.newInstance();
+
+    public static final AvroPrimitive NULL_TYPE = NULL.newInstance();
 
     public enum PrimitiveType {
         NULL("null", "null"),
@@ -87,10 +90,6 @@ public class AvroPrimitive extends AvroType {
 
     @Override
     public Set<String> getDependencies() {
-        return Collections.emptySet();
-    }
-
-    public boolean equalsType(AvroPrimitive other) {
-        return this.name.equals(other.name);
+        return emptySet();
     }
 }

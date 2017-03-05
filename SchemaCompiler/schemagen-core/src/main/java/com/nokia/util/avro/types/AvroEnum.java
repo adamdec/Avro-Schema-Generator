@@ -17,7 +17,6 @@
 package com.nokia.util.avro.types;
 
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,32 +31,32 @@ import java.util.Set;
  * @version 01-12-2012
  */
 public class AvroEnum extends NamedAvroType {
-	public static final String UNSET = "UNSET";     // added to every enumeration, supporting the default value
 
-	@JsonProperty
-	public final String type = "enum";
+    public static final String UNSET = "UNSET";     // added to every enumeration, supporting the default value
 
-	@JsonProperty
-	private final String[] symbols;
+    @JsonProperty
+    public final String type = "enum";
 
+    @JsonProperty
+    private final String[] symbols;
 
-	public AvroEnum(Collection<String> symbols) {
-		this(symbols.toArray(new String[symbols.size()]));
-	}
-	
-	public AvroEnum(String...theSymbols) {
-		if (theSymbols != null) {
-			symbols = Arrays.copyOf(theSymbols, theSymbols.length+1);
-			symbols[symbols.length-1] = UNSET;
-		} else {
-			this.symbols = new String[]{UNSET};
-		}
+    public AvroEnum(Collection<String> symbols) {
+        this(symbols.toArray(new String[symbols.size()]));
+    }
 
-		defaultValue = UNSET;
-	}
+    public AvroEnum(String... theSymbols) {
+        if (theSymbols != null) {
+            symbols = Arrays.copyOf(theSymbols, theSymbols.length + 1);
+            symbols[symbols.length - 1] = UNSET;
+        } else {
+            this.symbols = new String[]{UNSET};
+        }
 
-	@Override
-	public Set<String> getDependencies() {
-		return Collections.emptySet();
-	}
+        defaultValue = UNSET;
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+        return Collections.emptySet();
+    }
 }

@@ -24,40 +24,37 @@ import org.codehaus.jackson.annotate.JsonValue;
 import java.util.Collections;
 import java.util.Set;
 
-
 /**
  * @author Ben Fagin (Nokia)
  * @version 02-01-2012
- * 
- * A special type used to denote a JAXB reference, which is generally in the form of a String.
+ *          <p>
+ *          A special type used to denote a JAXB reference, which is generally in the form of a String.
  */
 public class ReferenceAvroType extends AvroType {
-	public static final String name = "_Reference";
-	public final String namespace;
-	
-	public ReferenceAvroType(String namespace) {
-		this.namespace = namespace;
-	}
-	
-	
-	@JsonValue
-	public String jsonValue() {
-		return namespace + "." + name;
-	}
+    public static final String name = "_Reference";
+    public final String namespace;
 
-	@Override
-	public Set<String> getDependencies() {
-		return Collections.emptySet();
-	}
+    public ReferenceAvroType(String namespace) {
+        this.namespace = namespace;
+    }
 
-	public static AvroRecord getSchema(String namespace) {
-		AvroType type = AvroPrimitive.PrimitiveType.STRING.newInstance();
-		AvroRecord record = new AvroRecord();
-		record.addField("id", type, type.getDefaultValue());
-		record.setDocs("A reference to an entity, similar to the IDREF object in XML schemas");
-		record.name = name;
-		record.namespace = namespace;
+    @JsonValue
+    public String jsonValue() {
+        return namespace + "." + name;
+    }
 
-		return record;
-	}
+    @Override
+    public Set<String> getDependencies() {
+        return Collections.emptySet();
+    }
+
+    public static AvroRecord getSchema(String namespace) {
+        AvroType type = AvroPrimitive.PrimitiveType.STRING.newInstance();
+        AvroRecord record = new AvroRecord();
+        record.addField("id", type, type.getDefaultValue(), null);
+        record.setDoc("A reference to an entity, similar to the IDREF object in XML schema");
+        record.name = name;
+        record.namespace = namespace;
+        return record;
+    }
 }

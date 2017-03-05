@@ -1,0 +1,17 @@
+{
+  "doc" : "XSD Type:{urn:nonstandard:XSD_Schema}Product",
+  "name" : "Product",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "id",
+    "type" : "long",
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}long",
+    "default" : "0"
+  }, {
+    "name" : "quantity",
+    "type" : [ "null", "string" ],
+    "doc" : "XSD Type:{http://www.w3.org/2001/XMLSchema}integer",
+    "default" : "null"
+  } ]
+}

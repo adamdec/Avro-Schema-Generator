@@ -1,0 +1,8 @@
+<jxb:bindings xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" version="2.1">
+  <jxb:bindings schemaLocation="advanced.xsd" node="/xs:schema/xs:complexType[@name='User']/xs:all/xs:element[@name='born']">
+    <jxb:property>
+        <jxb:javadoc>DateTime format "yyyy-MM-ddTHH:MM:SS"</jxb:javadoc>
+    </jxb:property>
+  </jxb:bindings>
+</jxb:bindings>

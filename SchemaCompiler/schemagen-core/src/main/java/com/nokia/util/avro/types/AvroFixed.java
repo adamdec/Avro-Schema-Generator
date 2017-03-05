@@ -30,33 +30,33 @@ import java.util.Set;
  * @version 01-12-2012
  */
 public class AvroFixed extends AvroType {
-	@JsonProperty
-	public final String type = "fixed";
 
-	@JsonProperty
-	public String name;
+    @JsonProperty
+    public final String type = "fixed";
 
-	@JsonProperty
-	@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-	public String namespace;
+    @JsonProperty
+    public String name;
 
+    @JsonProperty
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    public String namespace;
 
-	@JsonProperty
-	private final int size;
+    @JsonProperty
+    private final int size;
 
-	public AvroFixed(int size) {
-		this.size = size;
+    public AvroFixed(int size) {
+        this.size = size;
 
 		/*
-		 * From the avro docs:
+         * From the avro docs:
 	     *     Default values for bytes and fixed fields are JSON strings, where
 	     *     Unicode code points 0-255 are mapped to unsigned 8-bit byte values 0-255.
 		 */
-		defaultValue = "\\u00FF";
-	}
+        defaultValue = "\\u00FF";
+    }
 
-	@Override
-	public Set<String> getDependencies() {
-		return Collections.emptySet();
-	}
+    @Override
+    public Set<String> getDependencies() {
+        return Collections.emptySet();
+    }
 }

@@ -1,0 +1,14 @@
+{
+  "name" : "Products",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "product",
+    "type" : {
+      "doc" : null,
+      "type" : "array",
+      "items" : "com.nordea.avro.Product"
+    },
+    "default" : "[]"
+  } ]
+}

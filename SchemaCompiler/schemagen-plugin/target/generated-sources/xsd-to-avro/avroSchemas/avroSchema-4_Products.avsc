@@ -1,0 +1,14 @@
+{
+  "doc" : "XSD Type:{urn:nonstandard:XSD_Schema}Products",
+  "name" : "Products",
+  "namespace" : "com.nordea.avro",
+  "type" : "record",
+  "fields" : [ {
+    "name" : "product",
+    "type" : {
+      "type" : "array",
+      "items" : "com.nordea.avro.Product"
+    },
+    "default" : "[]"
+  } ]
+}

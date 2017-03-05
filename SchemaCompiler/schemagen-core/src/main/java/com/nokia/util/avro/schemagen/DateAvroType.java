@@ -27,36 +27,35 @@ import java.util.Set;
 /**
  * @author Ben Fagin (Nokia)
  * @version 02-03-2012
- * 
- * A special type supporting dates.
- * The dates are intended to be stored as long values, as milliseconds in UTC time.
+ *          <p>
+ *          A special type supporting dates.
+ *          The dates are intended to be stored as long values, as milliseconds in UTC time.
  */
 public class DateAvroType extends AvroType {
-	public static final String name = "_Date";
-	public final String namespace;
+    public static final String name = "_Date";
+    public final String namespace;
 
-	public DateAvroType(String namespace) {
-		this.namespace = namespace;
-	}
+    public DateAvroType(String namespace) {
+        this.namespace = namespace;
+    }
 
-	@JsonValue
-	public String jsonValue() {
-		return namespace + "." + name;
-	}
+    @JsonValue
+    public String jsonValue() {
+        return namespace + "." + name;
+    }
 
-	@Override
-	public Set<String> getDependencies() {
-		return Collections.emptySet();
-	}
+    @Override
+    public Set<String> getDependencies() {
+        return Collections.emptySet();
+    }
 
-	public static AvroRecord getSchema(String namespace) {
-		AvroType type = AvroPrimitive.PrimitiveType.LONG.newInstance();
-		AvroRecord record = new AvroRecord();
-		record.addField("timestamp", type, type.getDefaultValue());
-		record.setDocs("A date stored as a timestamp, in ms UTC.");
-		record.name = name;
-		record.namespace = namespace;
-
-		return record;
-	}	
+    public static AvroRecord getSchema(String namespace) {
+        AvroType type = AvroPrimitive.PrimitiveType.LONG.newInstance();
+        AvroRecord record = new AvroRecord();
+        record.addField("timestamp", type, type.getDefaultValue(), null);
+        record.setDoc("A date stored as a timestamp, in [ms] UTC.");
+        record.name = name;
+        record.namespace = namespace;
+        return record;
+    }
 }

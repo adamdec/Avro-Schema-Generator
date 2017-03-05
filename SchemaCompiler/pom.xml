@@ -17,6 +17,11 @@
             <organization>Nokia</organization>
             <email>ben.fagin@nokia.com</email>
         </developer>
+        <developer>
+            <name>Adam Dec</name>
+            <organization>Nordea</organization>
+            <email>adam.dec@consult.nordea.com</email>
+        </developer>
     </developers>
 
     <licenses>
@@ -51,9 +56,6 @@
     </build>
 
     <dependencies>
-
-        <!--test dependencies -->
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -61,5 +63,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

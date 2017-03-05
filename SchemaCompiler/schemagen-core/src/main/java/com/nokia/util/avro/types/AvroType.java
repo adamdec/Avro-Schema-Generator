@@ -17,6 +17,9 @@
 package com.nokia.util.avro.types;
 
 
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.Set;
 
 /**
@@ -28,6 +31,9 @@ import java.util.Set;
 public abstract class AvroType {
 
     protected String defaultValue;
+
+    @JsonProperty
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     protected String doc;
 
     /**
@@ -55,5 +61,9 @@ public abstract class AvroType {
 
     public final void setDoc(String doc) {
         this.doc = doc;
+    }
+
+    public final String getDoc() {
+        return doc;
     }
 }
